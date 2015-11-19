@@ -1,0 +1,19 @@
+.btn.btn-default, .btn.btn-primary{
+    width: auto;
+    height: 30px;
+}
+
+#button_add,#button_find,#button_delete{
+    width: 100px;
+    height: 50px;
+}
+
+#commands{
+    margin:50px 50px;
+    float: left;
+}
+
+form {
+    float: left;
+    padding: 50px 50px;
+}

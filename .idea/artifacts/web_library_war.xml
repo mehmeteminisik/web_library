@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="web library:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="FirstMavenWebProject.war">
+      <element id="artifact" artifact-name="web library:war exploded" />
+    </root>
+  </artifact>
+</component>

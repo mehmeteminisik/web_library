@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="css/bootstrap.css" type="text/css" rel="stylesheet">
+    <link href="css/custom.css" rel = stylesheet type = "text/css">
+    <title></title>
+</head>
+<body>
+<h1 style="text-align:center">LIBRARY<br></h1>
+
+<!-- book inputs -->
+<div class="book" style="margin:20px;">
+    <div id = formField>
+        <form id="allBookForm">
+            <div class="input-prepend">
+                <span class="add-on">Title</span>
+                <input type=text class="span4" id = title name = title  placeholder="Book Title...">
+            </div>
+            <br/>
+
+            <div class="input-prepend">
+                <span class="add-on">Author</span>
+                <input type=text class="span4" id= author name = author  placeholder="Book Author...">
+            </div>
+            <br/>
+
+            <div class="input-prepend">
+                <span class="add-on">Year</span>
+                <input type=text class="span4" id="year" name = year  placeholder="Book Year...">
+            </div>
+            <br/>
+
+            <div class="input-prepend">
+                <span class="add-on">Genre</span>
+                <select name = genre>
+                    <option value="">--Select Book Genre--</option>
+                    <option value = Horror>Horror</option>
+                    <option value = Fantasy>Fantasy</option>
+                    <option value = Travel>Travel</option>
+                    <option value = Autobiographies>Autobiographies</option>
+                </select>
+            </div> </br>
+
+            <!--<button class="btn btn-primary" id="findAll" type="button">Select</button>-->
+            <div class="col-lg-10 col-lg-offset-2">
+                <button type="reset" class="btn btn-default">Cancel</button>
+                <button type="button" class="btn btn-primary" id="findAll">Select</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+    <!-- display all books -->
+    <div id ="table_block" style="width:700px;padding:20px;">
+        <h2 style="text-align:center"><i style="color:#ccc"><small>Books selected</small></i></h2>
+        <table id="added-books" class="table">
+            <tr>
+                <th>ISBN</th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Year</th>
+                <th>Genre</th>
+            </tr>
+        </table>
+    </div>
+
+    <script src="js/jquery-1.6.2.min.js"></script>
+    <script src="js/my_scripts.js"></script>
+</body>
+</html>

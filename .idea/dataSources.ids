@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="dataSourceStorage">
+  <data-source name="MySQL - library@localhost" uuid="329776fc-ae32-4b9a-93c4-8c2b7ac6c5a9">
+    <database-info product="MySQL" version="5.6.25-log" jdbc-version="4.0" driver-name="MySQL Connector Java" driver-version="mysql-connector-java-5.1.35 ( Revision: 5fb9c5849535c13917c2cf9baaece6ef9693ef27 )">
+      <extra-name-characters>#@</extra-name-characters>
+      <identifier-quote-string>`</identifier-quote-string>
+    </database-info>
+    <case-sensitivity plain-identifiers="lower" quoted-identifiers="lower"/>
+    <schema name="" catalog="library"/>
+    <table name="book" schema="" catalog="library" type="TABLE">
+      <column name="isbn" sqlType="BIGINT" precision="19" scale="0" nullable="false" jdbcType="-5" autoIncrement="true"/>
+      <column name="author" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
+      <column name="title" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
+      <column name="year" sqlType="VARCHAR" precision="50" scale="0" nullable="true" jdbcType="12"/>
+      <primary-key name="PRIMARY" columns="isbn"/>
+      <exported-key name="FK_jtq670ud9a0il6csrvnybb7lp" table="book_genre" schema="" catalog="library" columns="book_isbn"/>
+    </table>
+    <table name="book_genre" schema="" catalog="library" type="TABLE">
+      <column name="genre_id" sqlType="BIGINT" precision="19" scale="0" nullable="false" jdbcType="-5"/>
+      <column name="book_isbn" sqlType="BIGINT" precision="19" scale="0" nullable="false" jdbcType="-5"/>
+      <foreign-key name="FK_21qfbh5aqd40pc3ifun9qyia5" columns="genre_id" ref-table="genre" ref-schema="" ref-catalog="library" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <foreign-key name="FK_jtq670ud9a0il6csrvnybb7lp" columns="book_isbn" ref-table="book" ref-schema="" ref-catalog="library" ref-columns="isbn" update-rule="3" delete-rule="3" deferrability="2"/>
+      <index name="FK_21qfbh5aqd40pc3ifun9qyia5" unique="false" columns="genre_id"/>
+      <index name="FK_jtq670ud9a0il6csrvnybb7lp" unique="false" columns="book_isbn"/>
+    </table>
+    <table name="genre" schema="" catalog="library" type="TABLE">
+      <column name="id" sqlType="BIGINT" precision="19" scale="0" nullable="false" jdbcType="-5" autoIncrement="true"/>
+      <column name="genre" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <exported-key name="FK_21qfbh5aqd40pc3ifun9qyia5" table="book_genre" schema="" catalog="library" columns="genre_id"/>
+    </table>
+    <table name="seat" schema="" catalog="library" type="TABLE">
+      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="raw" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="place" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="price" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="status" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <index name="unique_id" unique="true" columns="id"/>
+    </table>
+  </data-source>
+</component>
