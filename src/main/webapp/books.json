@@ -1,0 +1,6 @@
+[
+  {"isbn": 1,"title": "It","author": "Stephen King","year": 1986, "genres": [{"id": 1, "genre": "Horror"},{"id": 2, "genre": "Fantasy"},{"id": 3, "genre": "Travel"}]},
+  {"isbn": 2,"title": "Firestarter","author": "Stephen King","year": 2000, "genres": [{"id": 1, "genre": "Horror"},{"id": 3, "genre": "Travel"}]},
+  {"isbn": 3,"title": "Alchemic","author": "Paulo Koelcho","year": 1980, "genres": [{"id": 3, "genre": "Travel"}]}
+]
+

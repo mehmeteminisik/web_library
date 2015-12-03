@@ -13,7 +13,17 @@
     float: left;
 }
 
-form {
+form{
     float: left;
     padding: 50px 50px;
+}
+
+.form_info{
+    padding: 100px 50px 50px 50px;
+    text-align: center;
+}
+
+.alert-success {
+    text-align:center;
+    padding: 10px;
 }

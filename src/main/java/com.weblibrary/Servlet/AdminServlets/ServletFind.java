@@ -17,7 +17,7 @@ import java.io.IOException;
  */
 
 @WebServlet("/finder")
-public class ServletFind extends HttpServlet{
+public class ServletFind extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         response.setContentType("text/html");
         HttpSession session = request.getSession();

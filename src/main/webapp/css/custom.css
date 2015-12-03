@@ -13,6 +13,29 @@ select{
     width: 180px;
 }
 
+.table th, .table td {
+    padding: 5px;
+    vertical-align: middle;
+}
 
+.input-append .add-on, .input-prepend .add-on {
+    height:auto;
+}
 
+select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"],
+input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"],
+input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
+    height:auto;
+}
 
+#sel{
+    height:30px;
+}
+
+.h2{
+    color:#ccc;
+}
+
+.label-info {
+    background-color: #5d9cb7;
+}

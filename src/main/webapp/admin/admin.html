@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="admin">>
 <head>
     <link href="../css/bootstrap.css" type="text/css" rel="stylesheet">
     <link href="../css/custom_input.css" type="text/css" rel="stylesheet">
@@ -7,35 +7,35 @@
     <title>Library</title>
 </head>
 
-<body>
-<h1 style="text-align:center">LIBRARY<br></h1>
+<body ng-controller="list">
+    <h1 style="text-align:center">LIBRARY<br></h1>
     <div id = "commands" class="col-lg-10 col-lg-offset-2">
-        <button type="button" id="button_add" class="btn btn-default">Add</button> <br/>
+        <button type="button" id="button_add" class="btn btn-default" ng-click="showAdd()">Add</button> <br/>
         <button type="button" id="button_find" class="btn btn-default">Find</a></button> <br/>
-        <button type="button" id="button_delete" class="btn btn-default">Delete</a></button>
+        <button type="button" id="button_delete" class="btn btn-default" ng-click="showDelete()">Delete</a></button>
     </div>
 
     <!-- add -->
-    <div id = "addForm" class= "input_form">
-        <form id=add>
+    <div ng-show="AddIsVisible" class= "input_form">
+        <form name="myForm" ng-submit="add()">
             <div class="input-prepend">
                 <span class="add-on">Title</span>
-                <input type=text class="span4" name = title  placeholder="Book Title...">
+                <input type=text class="span4" name = title  data-ng-model="book_add.title" data-ng-init="book_add.title=''" placeholder="Book Title...">
             </div> <br/>
 
             <div class="input-prepend">
                 <span class="add-on">Author</span>
-                <input type=text class="span4" name = author  placeholder="Book Author...">
+                <input type=text class="span4" name = author  data-ng-model="book_add.author" data-ng-init="book_add.author=''" placeholder="Book Author...">
             </div> <br/>
 
             <div class="input-prepend">
                 <span class="add-on">Year</span>
-                <input type=text class="span4" name = year  placeholder="Book Year...">
+                <input type=text class="span4" name = year  data-ng-model="book_add.year" data-ng-init="book_add.year=''" placeholder="Book Year...">
             </div>
             <br/>
             <div class="input-prepend">
                 <span class="add-on">Genre</span>
-                <select name = genre1>
+                <select name = genre1 data-ng-model="book_add.genre1" data-ng-init="book_add.genre1=''">
                     <option value="">--Select Book Genre1--</option>
                     <option value = Horror>Horror</option>
                     <option value = Fantasy>Fantasy</option>
@@ -46,7 +46,7 @@
 
             <div class="input-prepend">
                 <span class="add-on">Genre</span>
-                <select name = genre2>
+                <select name = genre2 data-ng-model="book_add.genre2" data-ng-init="book_add.genre2=''">
                     <option value="">--Select Book Genre2--</option>
                     <option value = Horror>Horror</option>
                     <option value = Fantasy>Fantasy</option>
@@ -57,7 +57,7 @@
 
             <div class="input-prepend">
                 <span class="add-on">Genre</span>
-                <select name = genre3>
+                <select name = genre3 data-ng-model="book_add.genre3" data-ng-init="book_add.genre3=''">
                     <option value="">--Select Book Genre3--</option>
                     <option value = Horror>Horror</option>
                     <option value = Fantasy>Fantasy</option>
@@ -67,17 +67,17 @@
             </div> </br>
 
             <div class="col-lg-10 col-lg-offset-2">
-                <button type="reset" class="btn btn-default">Cancel</button>
-                <button type="button" class="btn btn-primary" id="submit_add">Submit</button>
+                <button class="btn btn-default" type="button" ng-click="reset()">Cancel</button>
+                <button class="btn btn-primary">Add</button>
             </div>
             </br>
-
-            <button class="btn btn-large btn-block" id = "info_added" type="button">Book added</button>
         </form>
     </div>
 
+    <form class="form_info"><button ng-show="ButtonBookAdded" ng-class="getClass(book)" type="button">{{book}}</button></form>
+
     <!-- find -->
-    <div id = "findForm" class= "input_form">
+    <div ng-show="FindIsVisible" class= "input_form">
         <form id="find">
             <div class="input-prepend">
                 <span class="add-on">ISBN</span>
@@ -85,32 +85,95 @@
             </div> <br/>
 
             <div class="col-lg-10 col-lg-offset-2">
-                <button type="reset" class="btn btn-default">Cancel</button>
+                <button class="btn btn-default" type="button" ng-click="reset()">Cancel</button>
                 <button type="button" class="btn btn-primary">Find</button>
             </div>
         </form>
     </div>
 
     <!-- delete -->
-    <div id = "deleteForm" class= "input_form">
-        <form id="delete">
+    <div ng-show="DeleteIsVisible" class= "input_form">
+        <form name="form" ng-submit="delete()">
             <div class="input-prepend">
                 <span class="add-on">ISBN</span>
-                <input type=text class="span4" name = isbn  placeholder="Book ISBN...">
+                <input type=text class="span4" name = isbn data-ng-model="book_delete.isbn" data-ng-init="book_delete.isbn=''" required placeholder="Book ISBN...">
             </div> <br/>
 
             <div class="col-lg-10 col-lg-offset-2">
-                <button type="reset" class="btn btn-default">Cancel</button>
-                <button type="button" class="btn btn-primary" id="submit_delete">Delete</button>
+                <button class="btn btn-default" type="button" ng-click="cancel()">Cancel</button>
+                <button class="btn btn-primary">Delete</button>
             </div>
             </br>
-
-            <!--<button class="btn btn-large btn-block" id = "info_deleted" type="button">Book deleted</button>-->
         </form>
     </div>
 
-<script src="../js/jquery-1.6.2.min.js"></script>
-<script src="../js/admin.js"></script>
-</div>
+    <script src="../js/angular.min.js"></script>
+    <script>
+        angular.module('admin', [])
+                .controller('list', function($scope, $http){
+                    $scope.book_add = {};// AngularJS will populate this object with input values based on the data-ng-model mappings.
+                    $scope.book_delete = {};
+                    $scope.add = function(){
+                        $http({
+                            method: 'POST',
+                            url: 'adder',
+                            headers: {'Content-Type': 'application/json'},
+                            data:  $scope.book_add
+                        }).success(function (data){
+                            $scope.AddIsVisible=false;
+                            $scope.ButtonBookAdded=true;
+                            $scope.book=data;
+                        });
+                    };
+
+                    $scope.delete = function(){
+                        $http({
+                            method: 'POST',
+                            url: 'deleter',
+                            headers: {'Content-Type': 'application/json'},
+                            data:  $scope.book_delete
+                        }).success(function (data){
+                            $scope.DeleteIsVisible=false;
+                            $scope.ButtonBookAdded=true;
+                            $scope.book=data;
+                        });
+                    };
+
+                    $scope.getClass = function(string) {
+                        return {
+                            "alert alert-success": (string.substring(0,4)=="Book"),
+                            "alert alert-error": (string.substring(0,5)=="Error")
+                        };
+                    };
+
+                    $scope.showAdd = function () {
+                        $scope.AddIsVisible = true;
+                        $scope.DeleteIsVisible = false;
+                        $scope.ButtonBookAdded = false;
+                    };
+
+                    $scope.showDelete = function () {
+                        $scope.DeleteIsVisible = true;
+                        $scope.AddIsVisible = false;
+                        $scope.ButtonBookDeleted = false;
+                        $scope.ButtonBookAdded = false;
+                    };
+
+                    $scope.cancel = function () {
+                        $scope.book_delete.isbn = "";
+                        $scope.form.$setPristine();
+                    };
+
+                    $scope.reset = function () {
+                        $scope.book_add.title = "";
+                        $scope.book_add.author = "";
+                        $scope.book_add.year = "";
+                        $scope.book_add.genre1 = "";
+                        $scope.book_add.genre2 = "";
+                        $scope.book_add.genre3 = "";
+                        $scope.myForm.$setPristine();
+                    };
+                });
+    </script>
 </body>
 </html>

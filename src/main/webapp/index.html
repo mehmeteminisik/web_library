@@ -1,71 +1,130 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <link href="css/bootstrap.css" type="text/css" rel="stylesheet">
-    <link href="css/custom.css" rel = stylesheet type = "text/css">
-    <title></title>
-</head>
-<body>
-<h1 style="text-align:center">LIBRARY<br></h1>
+<html lang="en" ng-app="angularTable">
+    <head>
+        <meta charset="UTF-8">
+        <link href="css/bootstrap.css" type="text/css" rel="stylesheet">
+        <link href="//netdna.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/custom.css" rel = stylesheet type = "text/css">
+        <title></title>
+    </head>
 
-<!-- book inputs -->
-<div class="book" style="margin:20px;">
-    <div id = formField>
-        <form id="allBookForm">
-            <div class="input-prepend">
-                <span class="add-on">Title</span>
-                <input type=text class="span4" id = title name = title  placeholder="Book Title...">
+    <body ng-controller="listdata">
+        <h1 style="text-align:center">LIBRARY<br></h1>
+        <!-- book inputs -->
+        <div class="book" style="margin:20px;">
+        <div id = formField>
+            <form ng-submit="findAll()">
+                <div class="input-prepend">
+                    <span class="add-on">Title</span>
+                    <input type=text class="span4" id = title name = title  data-ng-model="book.title" data-ng-init="book.title=''" placeholder="Book Title...">
+                </div>
+                <br/>
+
+                <div class="input-prepend">
+                    <span class="add-on">Author</span>
+                    <input type=text class="span4" id= author name = author  data-ng-model="book.author" data-ng-init="book.author=''" placeholder="Book Author...">
+                </div>
+                <br/>
+
+                <div class="input-prepend">
+                    <span class="add-on">Year</span>
+                    <input type=text class="span4" id="year" name = year  data-ng-model="book.year" data-ng-init="book.year=''" placeholder="Book Year...">
+                </div>
+                <br/>
+
+                <div class="input-prepend">
+                    <span class="add-on">Genre</span>
+                    <select id="sel" name = genre data-ng-model="book.genre" data-ng-init="book.genre=''">
+                        <option value="">--Select Book Genre--</option>
+                        <option value = Horror>Horror</option>
+                        <option value = Fantasy>Fantasy</option>
+                        <option value = Travel>Travel</option>
+                        <option value = Autobiographies>Autobiographies</option>
+                    </select>
+                </div> </br>
+
+                <div>
+                    <button class="btn btn-default" type="button" ng-click="reset()">Cancel</button>
+                    <button class="btn btn-primary">Select</button>
+                </div>
+            </form>
             </div>
-            <br/>
+        </div>
 
-            <div class="input-prepend">
-                <span class="add-on">Author</span>
-                <input type=text class="span4" id= author name = author  placeholder="Book Author...">
-            </div>
-            <br/>
+        <div ng-show="IsVisible" style="width:700px;padding:20px;">
+            <h2 style="text-align:center"><i style="color:#ccc"><small>Books selected</small></i></h2>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th ng-click="sort('isbn')">ISBN
+                        <span class="glyphicon sort-icon" ng-show="sortKey=='isbn'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                    </th>
+                    <th ng-click="sort('title')">Title
+                        <span class="glyphicon sort-icon" ng-show="sortKey=='title'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                    </th>
+                    <th ng-click="sort('author')">Author
+                        <span class="glyphicon sort-icon" ng-show="sortKey=='author'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                    </th>
+                    <th ng-click="sort('year')">Year
+                        <span class="glyphicon sort-icon" ng-show="sortKey=='year'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                    </th>
+                    <th>Genre</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="book in books|orderBy:sortKey:reverse|filter:search">
+                    <td>{{book.isbn}}</td>
+                    <td>{{book.title}}</td>
+                    <td>{{book.author}}</td>
+                    <td>{{book.year}}</td>
+                    <td >
+                        <span ng-repeat="item in book.genres" class='label label-info' style='margin:4px;padding:4px'/>{{item.genre}}</span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
 
-            <div class="input-prepend">
-                <span class="add-on">Year</span>
-                <input type=text class="span4" id="year" name = year  placeholder="Book Year...">
-            </div>
-            <br/>
+        <script src="js/angular.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+        <script>
+            angular.module('angularTable', [])
+                    .controller('listdata', function($scope, $http){
+                        $scope.IsVisible = false;
+                        $scope.book = {};//// AngularJS will populate this object with input values based on the data-ng-model mappings.
+                        $scope.books=[];
 
-            <div class="input-prepend">
-                <span class="add-on">Genre</span>
-                <select name = genre>
-                    <option value="">--Select Book Genre--</option>
-                    <option value = Horror>Horror</option>
-                    <option value = Fantasy>Fantasy</option>
-                    <option value = Travel>Travel</option>
-                    <option value = Autobiographies>Autobiographies</option>
-                </select>
-            </div> </br>
+                        $scope.findAll = function(){
+                            $scope.showDiv();
+                            console.log($scope.book);
+                            $http({
+                                method: 'POST',
+                                url: 'findAll',
+                                headers: {'Content-Type': 'application/json'},
+                                data:  $scope.book
+                            }).success(function (data){
+                                console.log(data);
+                                $scope.books=data;
+                            });
+                        };
 
-            <!--<button class="btn btn-primary" id="findAll" type="button">Select</button>-->
-            <div class="col-lg-10 col-lg-offset-2">
-                <button type="reset" class="btn btn-default">Cancel</button>
-                <button type="button" class="btn btn-primary" id="findAll">Select</button>
-            </div>
-        </form>
-    </div>
-</div>
+                        $scope.showDiv = function () {
+                            $scope.IsVisible = true;
+                        };
 
-    <!-- display all books -->
-    <div id ="table_block" style="width:700px;padding:20px;">
-        <h2 style="text-align:center"><i style="color:#ccc"><small>Books selected</small></i></h2>
-        <table id="added-books" class="table">
-            <tr>
-                <th>ISBN</th>
-                <th>Title</th>
-                <th>Author</th>
-                <th>Year</th>
-                <th>Genre</th>
-            </tr>
-        </table>
-    </div>
+                        $scope.sort = function(keyname){
+                            $scope.sortKey = keyname;   //set the sortKey to the param passed
+                            $scope.reverse = !$scope.reverse; //if true make it false and vice versa
+                        };
 
-    <script src="js/jquery-1.6.2.min.js"></script>
-    <script src="js/my_scripts.js"></script>
-</body>
+                        $scope.reset = function () {
+                            $scope.book.title = "";
+                            $scope.book.author = "";
+                            $scope.book.year = "";
+                            $scope.book.genre = "";
+                            $scope.form.$setPristine();
+                        };
+                    });
+        </script>
+    </body>
 </html>

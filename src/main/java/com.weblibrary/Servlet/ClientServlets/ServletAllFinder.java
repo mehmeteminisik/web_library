@@ -12,18 +12,29 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.List;
 
 @WebServlet("/findAll")
 public class ServletAllFinder extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String json=request.getParameter("bookData");
-        System.out.println("input data: " + json);
+
+        StringBuffer json = new StringBuffer();
+        try{
+            BufferedReader reader = request.getReader();
+            String line = null;
+            while ((line = reader.readLine()) != null){
+                json.append(line);
+            }
+        } catch (Exception e) {
+         e.printStackTrace();
+        }
+        String string=json.toString();
+        System.out.println("INPUT DATA: " + string);
 
         Gson gson = new Gson();
-        JsonObject input = gson.fromJson(json, JsonElement.class).getAsJsonObject();
-
+        JsonObject input = gson.fromJson(string, JsonElement.class).getAsJsonObject();
         String  title = input.get("title").getAsString(), author = input.get("author").getAsString(),
                 year = input.get("year").getAsString(), genre = input.get("genre").getAsString();
         System.out.println(title + ", " + author + ", " + year + ", " + genre);
@@ -31,7 +42,6 @@ public class ServletAllFinder extends HttpServlet {
         BookDAO bookDAO=(BookDAO)getServletContext().getAttribute("bookDao");
         BookFull bookFull = bookDAO.findAll(title, author, year, genre);
         List<Book> books = bookFull.getAll();
-        System.out.println(books);
 
         try{
             response.setContentType("application/json");
